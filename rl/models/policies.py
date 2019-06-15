@@ -50,3 +50,43 @@ class DeterministicPolicy(Network):
         a = self.mean(s)
         a = ((a + 1) / 2) * (self.max_a - self.min_a) + self.min_a
         return a
+
+class TanhPolicy(Network):
+    def __init__(self, env):
+        super(TanhPolicy, self).__init__(env)
+
+        self.main = nn.Sequential(
+            nn.Linear(self.n_obs, 64),
+            nn.Tanh(),
+            nn.Linear(64, 64),
+            nn.Tanh()
+        )
+
+        self.mean = nn.Sequential(
+            nn.Linear(64, self.n_acts)
+        )
+
+        self.log_std = nn.Sequential(
+            nn.Linear(64, self.n_acts)
+        )
+
+    def dist(self, s):
+        s = self.main(s)
+        mean = self.mean(s)
+        std = torch.exp(self.log_std(s).expand_as(mean))
+        dist = Normal(mean, std)
+        return dist
+
+    def forward(self, s):
+        dist = self.dist(s)
+        a = torch.tanh(dist.sample())
+        return a
+
+    def sample(self, s):
+        dist = self.dist(s)
+        x = dist.rsample()
+        a = torch.tanh(x)
+        log_p = dist.log_prob(x)
+        log_p -= torch.log(1 - torch.pow(a, 2) + 1e-6)
+        a = torch.pow(a, 1)
+        return a, log_p

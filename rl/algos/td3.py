@@ -1,4 +1,3 @@
-import numpy as np
 from rl.algorithm import Algorithm
 from rl.models import *
 from rl.utils import *
@@ -16,8 +15,7 @@ class TD3(Algorithm):
         self.explore()
 
     def interact(self, s):
-        noise = np.random.normal(0, 0.15)
-        a = clip_action(self.μ(s), noise, self.env)
+        a = noisy_action(self.μ(s), 0.15, self.env)
 
         s2, r, done, _ = self.env.step(a)
         data = (s, a, r, s2, done)
@@ -26,8 +24,7 @@ class TD3(Algorithm):
     def update(self, storage):
         s, a, r, s2, m = storage.sample()
 
-        noise = np.clip(np.random.normal(0, 0.15), -0.5, 0.5)
-        a2 = clip_action(self.μ.target(s2), noise, self.env)
+        a2 = noisy_action(self.μ.target(s2), 0.15, self.env, clip=0.5)
         min_next_q = torch.min(self.Q1.target(s2, a2), self.Q2.target(s2, a2))
         y = r + (0.99 * m * min_next_q)
 

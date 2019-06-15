@@ -1,10 +1,11 @@
+import gym
 import torch
 from rl.storage import *
 from rl.visualize import *
 
 class Agent:
-    def __init__(self, env, algo, config):
-        self.env = env
+    def __init__(self, algo, config):
+        self.env = gym.make(config.env)
         self.config = config
 
         self.storage = Storage(config)
