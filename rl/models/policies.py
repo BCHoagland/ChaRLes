@@ -5,7 +5,7 @@ from rl.models.base import Network
 
 class CategoricalPolicy(Network):
     def __init__(self, env):
-        super(CategoricalPolicy, self).__init__(env)
+        super().__init__(env)
 
         self.mean = nn.Sequential(
             nn.Linear(self.n_obs, 64),
@@ -28,7 +28,7 @@ class CategoricalPolicy(Network):
 
 class StochasticPolicy(Network):
     def __init__(self, env):
-        super(StochasticPolicy, self).__init__(env)
+        super().__init__(env)
 
         self.mean = nn.Sequential(
             nn.Linear(self.n_obs, 64),
@@ -56,7 +56,7 @@ class StochasticPolicy(Network):
 
 class DeterministicPolicy(Network):
     def __init__(self, env):
-        super(DeterministicPolicy, self).__init__(env)
+        super().__init__(env)
 
         self.mean = nn.Sequential(
             nn.Linear(self.n_obs, 64),
@@ -74,7 +74,7 @@ class DeterministicPolicy(Network):
 
 class TanhPolicy(Network):
     def __init__(self, env):
-        super(TanhPolicy, self).__init__(env)
+        super().__init__(env)
 
         self.main = nn.Sequential(
             nn.Linear(self.n_obs, 64),

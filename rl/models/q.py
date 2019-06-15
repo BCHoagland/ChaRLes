@@ -4,7 +4,7 @@ from rl.models.base import Network
 
 class Q(Network):
     def __init__(self, env):
-        super(Q, self).__init__(env)
+        super().__init__(env)
 
         self.pre_state = nn.Sequential(
             nn.Linear(self.n_obs, 64),
@@ -31,7 +31,7 @@ class Q(Network):
 
 class V(Network):
     def __init__(self, env):
-        super(V, self).__init__(env)
+        super().__init__(env)
 
         self.main = nn.Sequential(
             nn.Linear(self.n_obs, 64),

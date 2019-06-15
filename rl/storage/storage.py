@@ -3,7 +3,7 @@ import torch
 import numpy as np
 from collections import deque
 
-class Storage():
+class Storage:
     def __init__(self, config):
         self.buffer = deque(maxlen=config.storage_size)
         self.config = config

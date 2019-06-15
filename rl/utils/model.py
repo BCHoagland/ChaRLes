@@ -1,7 +1,7 @@
 import torch
 from copy import deepcopy
 
-class Model():
+class Model:
     def __init__(self, model, lr, target=False, τ=0.995, optim=torch.optim.Adam):
         self.model = model
         if target: self.target_model = deepcopy(model)

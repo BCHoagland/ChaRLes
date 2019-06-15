@@ -1,11 +1,13 @@
 from rl.algorithm import Algorithm
 from rl.models import *
+from rl.env import *
 from rl.utils import *
 
 class SAC(Algorithm):
     def setup(self):
         self.name = 'SAC'
         self.type = 'off-policy'
+        self.env_wrappers = [TanhAction]
 
         self.π = Model(TanhPolicy(self.env), 3e-4)
         self.Q1 = Model(Q(self.env), 3e-4, target=True)
@@ -17,7 +19,7 @@ class SAC(Algorithm):
 
     def interact(self, s):
         a = self.π(s)
-        s2, r, done, _ = self.env.step(a * 2)               # FIX WITH ENV WRAPPER
+        s2, r, done, _ = self.env.step(a)
         data = (s, a, r, s2, done)
         return s2, r, done, data
 

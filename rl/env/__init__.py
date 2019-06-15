@@ -1,1 +1,1 @@
-from rl.env.env import Env
+from rl.env.env import Env, TanhAction

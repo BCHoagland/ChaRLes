@@ -6,6 +6,12 @@ from rl.visualize import *
 class Agent:
     def __init__(self, algo, config):
         self.env = Env(config.env)
+        try:
+            for env_wrapper in self.algo.env_wrappers:
+                self.env = env_wrapper(self.env)
+        except:
+            pass
+
         self.visualizer = Visualizer()
         self.config = config
 

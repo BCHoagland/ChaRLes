@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 
-class LearnableParam():
+class LearnableParam:
     def __init__(self, init_value, lr, optim=torch.optim.Adam):
         self.log = torch.tensor(np.log(init_value), requires_grad=True)
         self.optimizer = optim([self.log], lr=lr)
