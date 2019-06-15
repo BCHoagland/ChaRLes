@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 class Network(nn.Module):
@@ -13,8 +14,8 @@ class Network(nn.Module):
             self.n_acts = env.action_space.n
 
         try:
-            self.min_a = env.action_space.high[0]
-            self.max_a = env.action_space.high[0]
+            self.min_a = torch.FloatTensor(env.action_space.low)
+            self.max_a = torch.FloatTensor(env.action_space.high)
         except:
             self.min_a = None
             self.max_a = None

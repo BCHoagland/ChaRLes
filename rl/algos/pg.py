@@ -1,12 +1,12 @@
+from rl.algorithm import Algorithm
 from rl.models import *
 from rl.utils import *
 
-class PG:
-    def setup(self, env):
+class PG(Algorithm):
+    def setup(self):
         self.name = 'PG'
 
-        self.policy = Model(LinearPolicy(env), 1e-3)
-        self.env = env
+        self.policy = Model(CategoricalPolicy(self.env), 1e-3)
 
     def interact(self, s):
         a = self.policy(s)

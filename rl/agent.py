@@ -7,10 +7,19 @@ class Agent:
         self.env = env
         self.config = config
 
-        self.algo = algo()
-        self.algo.setup(env)
+        self.storage = Storage(config)
 
-        self.storage = Storage()
+        self.algo = algo()
+        self.algo.agent = self
+        self.algo.setup()
+
+    def explore(self):
+        s = self.env.reset()
+        for step in range(int(10000)):
+            a = self.env.action_space.sample()
+            s2, r, done, _ = self.env.step(a)
+            self.storage.store((s, a, r, s2, done))
+            s = self.env.reset() if done else s2
 
     def train(self):
         ep = 0

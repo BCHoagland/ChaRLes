@@ -14,13 +14,14 @@ class Model():
         self.optimizer.step()
 
     def target(self, *args):
-        return self.target_model(*args)
+        with torch.no_grad():
+            return self.target_model(*[torch.FloatTensor(arg) for arg in args])
 
     def __getattr__(self, k):
         return getattr(self.model, k)
 
     def __call__(self, *args):
-        return self.model(*args)
+        return self.model(*[torch.FloatTensor(arg) for arg in args])
 
     def soft_update_target(self):
         for param, target_param in zip(self.model.parameters(), self.target_model.parameters()):

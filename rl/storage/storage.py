@@ -1,3 +1,4 @@
+import random
 import torch
 import numpy as np
 from collections import deque
@@ -31,16 +32,9 @@ from collections import deque
 #         self.data.clear()
 
 class Storage():
-    def __init__(self, size=None):
-        self.buffer = deque(maxlen=size)
-
-    def get_all(self):
-        s_arr = torch.FloatTensor(np.array([arr[0] for arr in self.buffer]))
-        a_arr = torch.FloatTensor(np.array([arr[1] for arr in self.buffer]))
-        r_arr = torch.FloatTensor(np.array([arr[2] for arr in self.buffer]))
-        m_arr = torch.FloatTensor(np.array([arr[3] for arr in self.buffer]))
-
-        return s_arr, a_arr, r_arr.unsqueeze(1), m_arr.unsqueeze(1)
+    def __init__(self, config):
+        self.buffer = deque(maxlen=config.storage_size)
+        self.config = config
 
     def store(self, data):
         def fix(x):
@@ -50,6 +44,23 @@ class Storage():
 
         transition = tuple(fix(x) for x in data)
         self.buffer.append(transition)
+
+    def get(self, source):
+        n = len(self.buffer[0])
+        data = [torch.FloatTensor(np.array([arr[i] for arr in source])) for i in range(n)]
+        max_dim = max([len(d.shape) for d in data])
+        for i in range(len(data)):
+            while len(data[i].shape) < max_dim:
+                data[i].unsqueeze_(1)
+        return data
+
+    def get_all(self):
+        return self.get(self.buffer)
+
+    def sample(self):
+        batch_size = min(len(self.buffer), self.config.batch_size)
+        batch = random.sample(self.buffer, batch_size)
+        return self.get(batch)
 
     def clear(self):
         self.buffer.clear()
