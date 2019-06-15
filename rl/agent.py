@@ -29,7 +29,7 @@ class Agent:
         s = self.env.reset()
         while ep < self.config.max_eps:
             t = 0
-            while self.config.trajectory_length == 'ep' or t < self.config.trajectory_length:
+            while t < self.config.trajectory_length:
                 with torch.no_grad():
                     s2, r, done, data = self.algo.interact(s)
                 ep_reward += r
@@ -42,11 +42,9 @@ class Agent:
                     if ep % self.config.vis_iter == self.config.vis_iter - 1:
                         self.visualizer.update_viz(ep, ep_reward, self.algo.name)
                     ep_reward = 0
-
-                    if self.config.trajectory_length == 'ep':
-                        self.algo.update(self.storage)
-                        break
                 t += 1
 
-            if self.config.trajectory_length != 'ep':
+            for _ in range(self.config.epochs):
                 self.algo.update(self.storage)
+            if self.algo.type == 'on-policy':
+                self.storage.clear()

@@ -17,6 +17,9 @@ class Model():
         with torch.no_grad():
             return self.target_model(*[torch.FloatTensor(arg) for arg in args])
 
+    def log_prob(self, *args):
+        return self.model.log_prob(*[torch.FloatTensor(arg) for arg in args])
+
     def __getattr__(self, k):
         return getattr(self.model, k)
 

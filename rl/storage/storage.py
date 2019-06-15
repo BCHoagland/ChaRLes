@@ -42,6 +42,23 @@ class Storage():
         batch = random.sample(self.buffer, batch_size)
         return self.get(batch)
 
+    def get_batches(self):
+        # N = len(self.buffer)
+        # batch_size = min(N, self.config.batch_size)
+        # num_batches = len(self.buffer) // batch_size
+        #
+        # i = list(range(1, N))
+        # random.shuffle(i)
+        #
+        # for batch in range(num_batches):
+        #     yield self.get(self.buffer[])
+
+        # TODO: shuffle all data, not just sample randomly multiple times
+
+        num_batches = max(1, len(self.buffer) // self.config.batch_size)
+        for _ in range(num_batches):
+            yield self.sample()
+
     def clear(self):
         '''clear stored data'''
         self.buffer.clear()
