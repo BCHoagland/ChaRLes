@@ -28,15 +28,13 @@ class PPO(Algorithm):
             for i in reversed(range(len(r))):
                 returns[i] = r[i] + discounted_next
                 discounted_next = 0.99 * returns[i] * m[i - 1]
-
-            # normalize returns
             returns = torch.FloatTensor(returns).unsqueeze(1)
-            mean = returns.mean()
-            std = returns.std()
-            returns = (returns - mean) / (std + 1e-6)
 
-            # calculate advantage
+            # calculate and normalize advantage
             adv = returns - v
+            mean = adv.mean()
+            std = adv.std()
+            adv = (adv - mean) / (std + 1e-6)
 
             # calculate new log probabilities
             new_log_p = self.π.log_prob(s, a)
