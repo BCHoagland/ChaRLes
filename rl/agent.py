@@ -6,6 +6,7 @@ from rl.visualize import *
 class Agent:
     def __init__(self, algo, config):
         self.env = gym.make(config.env)
+        self.visualizer = Visualizer()
         self.config = config
 
         self.storage = Storage(config)
@@ -39,7 +40,7 @@ class Agent:
                     s = self.env.reset()
                     ep += 1
                     if ep % self.config.vis_iter == self.config.vis_iter - 1:
-                        update_viz(ep, ep_reward, self.algo.name)
+                        self.visualizer.update_viz(ep, ep_reward, self.algo.name)
                     ep_reward = 0
 
                     if self.config.trajectory_length == 'ep':

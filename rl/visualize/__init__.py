@@ -1,1 +1,1 @@
-from rl.visualize.visualize import update_viz
+from rl.visualize.visualize import Visualizer
