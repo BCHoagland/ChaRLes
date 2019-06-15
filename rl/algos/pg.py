@@ -5,11 +5,12 @@ from rl.utils import *
 class PG(Algorithm):
     def setup(self):
         self.name = 'PG'
+        self.type = 'on-policy'
 
-        self.policy = Model(CategoricalPolicy(self.env), 1e-3)
+        self.π = Model(CategoricalPolicy(self.env), 1e-3)
 
     def interact(self, s):
-        a = self.policy(s)
+        a = self.π(s)
         s2, r, done, _ = self.env.step(a)
         data = (s, a, r, done)
         return s2, r, done, data
@@ -31,11 +32,8 @@ class PG(Algorithm):
         returns = (returns - mean) / (std + 1e-6)
 
         # calculate log probabilities
-        log_p = self.policy.log_prob(s, a)
+        log_p = self.π.log_prob(s, a)
 
         # update policy
         loss = -(returns * log_p).mean()
-        self.policy.optimize(loss)
-
-        # clear history
-        storage.clear()
+        self.π.optimize(loss)

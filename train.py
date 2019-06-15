@@ -1,14 +1,16 @@
 from rl import *
 
-# POLICY GRADIENT: CARTPOLE
+# PROXIMAL POLICY OPTIMIZATION: ANT
 class Config:
-    env = 'CartPole-v1'
-    max_eps = 300
-    trajectory_length = 'ep'
-    vis_iter = 10
+    env = 'Ant-v2'
+    max_eps = 1000
+    trajectory_length = 200
+    vis_iter = 1
     storage_size = None
+    batch_size = 10
+    epochs = 4
 
-agent = Agent(PG, Config)
+agent = Agent(PPO, Config)
 agent.train()
 
 # SOFT ACTOR-CRITIC: PENDULUM
@@ -19,6 +21,7 @@ class Config:
     vis_iter = 1
     storage_size = 1000000
     batch_size = 128
+    epochs = 1
 
 agent = Agent(SAC, Config)
 agent.train()

@@ -1,7 +1,7 @@
 import torch
 from copy import deepcopy
 
-class Model():
+class Model:
     def __init__(self, model, lr, target=False, τ=0.995, optim=torch.optim.Adam):
         self.model = model
         if target: self.target_model = deepcopy(model)
@@ -16,6 +16,9 @@ class Model():
     def target(self, *args):
         with torch.no_grad():
             return self.target_model(*[torch.FloatTensor(arg) for arg in args])
+
+    def log_prob(self, *args):
+        return self.model.log_prob(*[torch.FloatTensor(arg) for arg in args])
 
     def __getattr__(self, k):
         return getattr(self.model, k)
