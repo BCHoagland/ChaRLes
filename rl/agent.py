@@ -1,11 +1,11 @@
-import gym
 import torch
+from rl.env import *
 from rl.storage import *
 from rl.visualize import *
 
 class Agent:
     def __init__(self, algo, config):
-        self.env = gym.make(config.env)
+        self.env = Env(config.env)
         self.visualizer = Visualizer()
         self.config = config
 
@@ -18,7 +18,7 @@ class Agent:
     def explore(self):
         s = self.env.reset()
         for step in range(int(10000)):
-            a = self.env.action_space.sample()
+            a = torch.FloatTensor(self.env.action_space.sample())
             s2, r, done, _ = self.env.step(a)
             self.storage.store((s, a, r, s2, done))
             s = self.env.reset() if done else s2

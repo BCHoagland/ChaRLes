@@ -5,6 +5,7 @@ from rl.utils import *
 class PG(Algorithm):
     def setup(self):
         self.name = 'PG'
+        self.type = 'on-policy'
 
         self.π = Model(CategoricalPolicy(self.env), 1e-3)
 
@@ -36,6 +37,3 @@ class PG(Algorithm):
         # update policy
         loss = -(returns * log_p).mean()
         self.π.optimize(loss)
-
-        # clear history
-        storage.clear()

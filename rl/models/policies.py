@@ -21,7 +21,7 @@ class CategoricalPolicy(Network):
 
     def forward(self, s):
         a = self.dist(s).sample()
-        return a.numpy()
+        return a
 
     def log_prob(self, s, a):
         return self.dist(s).log_prob(a)
@@ -49,7 +49,7 @@ class StochasticPolicy(Network):
     def forward(self, s):
         a = self.dist(s).sample()
         a = ((a + 1) / 2) * (self.max_a - self.min_a) + self.min_a
-        return a.numpy()
+        return a
 
     def log_prob(self, s, a):
         return self.dist(s).log_prob(a)

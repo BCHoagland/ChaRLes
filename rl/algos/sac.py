@@ -5,6 +5,7 @@ from rl.utils import *
 class SAC(Algorithm):
     def setup(self):
         self.name = 'SAC'
+        self.type = 'off-policy'
 
         self.π = Model(TanhPolicy(self.env), 3e-4)
         self.Q1 = Model(Q(self.env), 3e-4, target=True)

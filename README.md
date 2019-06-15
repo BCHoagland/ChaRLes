@@ -1,14 +1,15 @@
 # ChaRLes
 
-ChaRLes is my personal library for implementing Deep RL algorithms and running experiments
+ChaRLes is my personal library for implementing Deep RL algorithms and running experiments. Compatible with OpenAI Gym environments.
 
-### Supported Algorithms
+## Supported Algorithms
 
-##### On-Policy
+#### On-Policy
 - [x] Policy Gradient (PG)
-- [x] Proximal Policy Optimization
+- [x] Proximal Policy Optimization (PPO)
 
-##### Off-Policy
+#### Off-Policy
+- [ ] Deep Q Learning (DQN)
 - [x] Deep Deterministic Policy Gradient (DDPG)
 - [x] Twin Dueling DDPG (TD3)
 - [x] Soft Actor-Critic (SAC) ***(continuous actions only)***
@@ -16,10 +17,12 @@ ChaRLes is my personal library for implementing Deep RL algorithms and running e
 
 
 
-### Usage
-From the top level of the ChaRLes directory, create a file and include `from rl import *` at the top.
-To run an algorithm in an OpenAI Gym environment, create a class and give it the necessary environment information and hyperparameters as fields.
-Pass the class of the algorithm you want and the config class you just made into a new Agent, then call `agent.train()`
+## Usage
+Visdom must be running prior to training.
+
+From the top level of the ChaRLes directory, create a file and include `from rl import *` at the top. This imports the various algorithm classes and allows you to construct an agent.
+
+To train an agent, create a config class and give it the necessary environment information and hyperparameters as fields. Pass the class of the algorithm you want and the config class you just made into a new Agent, then invoke `agent.train()`
 
 ##### Example: train.py
 ```python
