@@ -6,6 +6,7 @@ class PG(Algorithm):
     def setup(self):
         self.name = 'PG'
         self.type = 'on-policy'
+        self.color = [0, 85, 135]
 
         self.π = Model(CategoricalPolicy(self.env), 1e-3)
 

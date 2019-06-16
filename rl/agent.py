@@ -45,8 +45,8 @@ class Agent:
                 if done:
                     s = self.env.reset()
                     ep += 1
-                    if ep % self.config.vis_iter == self.config.vis_iter - 1:
-                        self.visualizer.update_viz(ep, ep_reward, self.algo.name)
+                    if ep % self.config.vis_iter == 0:
+                        self.visualizer.update_viz(ep, ep_reward, self.config.env, self.algo.name, self.algo.color)
                     ep_reward = 0
                 t += 1
 

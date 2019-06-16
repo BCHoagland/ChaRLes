@@ -6,6 +6,7 @@ class TD3(Algorithm):
     def setup(self):
         self.name = 'TD3'
         self.type = 'off-policy'
+        self.color = [232, 153, 35]
 
         self.μ = Model(DeterministicPolicy(self.env), 1e-3, target=True)
         self.Q1 = Model(Q(self.env), 1e-4, target=True)

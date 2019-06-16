@@ -7,14 +7,24 @@ class Env:
         self.observation_space = self.env.observation_space
         self.action_space = self.env.action_space
 
-        self.action_space.low = torch.FloatTensor(self.action_space.low)
-        self.action_space.high = torch.FloatTensor(self.action_space.high)
+        try:
+            self.action_space.low = torch.FloatTensor(self.action_space.low)
+            self.action_space.high = torch.FloatTensor(self.action_space.high)
+        except:
+            self.action_space.low = None
+            self.action_space.high = None
 
     def reset(self):
         return self.env.reset()
 
     def step(self, a):
         return self.env.step(a.numpy())
+
+    def render(self):
+        return self.env.render()
+
+    def close(self):
+        return self.env.close()
 
 class TanhAction(Env):
     def __init__(self, env_name):

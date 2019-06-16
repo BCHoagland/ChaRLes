@@ -7,15 +7,17 @@ class Visualizer:
     def __init__(self):
         self.win = None
 
-    def update_viz(self, ep, ep_reward, algo, xlabel='episodes'):
+    def update_viz(self, ep, ep_reward, env, algo, color, xlabel='episodes'):
+        title = env + ' (' + algo + ')'
         if self.win is None:
             self.win = viz.line(
                 X=np.array([ep]),
                 Y=np.array([ep_reward]),
-                win=algo,
+                win=title,
                 opts=dict(
-                    title=algo,
-                    xlabel=xlabel
+                    title=title,
+                    xlabel=xlabel,
+                    linecolor=np.array([color])
                 )
             )
         else:

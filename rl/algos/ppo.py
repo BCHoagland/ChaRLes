@@ -6,6 +6,7 @@ class PPO(Algorithm):
     def setup(self):
         self.name = 'PPO'
         self.type = 'on-policy'
+        self.color = [153, 51, 153]
 
         self.π = Model(StochasticPolicy(self.env), 1e-3)
         self.V = Model(V(self.env), 1e-3)

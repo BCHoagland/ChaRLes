@@ -7,6 +7,8 @@ class SAC(Algorithm):
     def setup(self):
         self.name = 'SAC'
         self.type = 'off-policy'
+        self.color = [51, 152, 152]
+
         self.env_wrappers = [TanhAction]
 
         self.π = Model(TanhPolicy(self.env), 3e-4)

@@ -109,5 +109,4 @@ class TanhPolicy(Network):
         a = torch.tanh(x)
         log_p = dist.log_prob(x)
         log_p -= torch.log(1 - torch.pow(a, 2) + 1e-6)
-        a = torch.pow(a, 1)
         return a, log_p
