@@ -1,7 +1,7 @@
-from rl.algorithm import Algorithm
-from rl.models import *
-from rl.env import *
-from rl.utils import *
+from charles.algorithm import Algorithm
+from charles.models import *
+from charles.env import *
+from charles.utils import *
 
 class SAC(Algorithm):
     def setup(self):

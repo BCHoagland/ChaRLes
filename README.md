@@ -20,7 +20,7 @@ ChaRLes is my personal library for implementing Deep RL algorithms and running e
 ## Usage
 Visdom must be running prior to training.
 
-From the top level of the ChaRLes directory, create a file and include `from rl import *` at the top. This imports the various algorithm classes and allows you to construct an agent.
+From the top level of the ChaRLes directory, create a file and include `from charles import *` at the top. This imports the various algorithm classes and allows you to construct an agent.
 
 To train an agent, create a config class and give it the necessary environment information and hyperparameters as fields. Pass the class of the algorithm you want and the config class you just made into a new Agent, then invoke `agent.train()`
 

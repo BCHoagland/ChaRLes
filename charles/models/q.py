@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from rl.models.base import Network
+from charles.models.base import Network
 
 class Q(Network):
     def __init__(self, env):

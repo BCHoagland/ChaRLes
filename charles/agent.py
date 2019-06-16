@@ -1,7 +1,7 @@
 import torch
-from rl.env import *
-from rl.storage import *
-from rl.visualize import *
+from charles.env import *
+from charles.storage import *
+from charles.visualize import *
 
 class Agent:
     def __init__(self, algo, config):

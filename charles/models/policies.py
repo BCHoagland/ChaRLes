@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.distributions import Normal, Categorical
-from rl.models.base import Network
+from charles.models.base import Network
 
 class CategoricalPolicy(Network):
     def __init__(self, env):

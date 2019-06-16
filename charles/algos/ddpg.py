@@ -1,6 +1,6 @@
-from rl.algorithm import Algorithm
-from rl.models import *
-from rl.utils import *
+from charles.algorithm import Algorithm
+from charles.models import *
+from charles.utils import *
 
 class DDPG(Algorithm):
     def setup(self):
