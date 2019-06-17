@@ -7,7 +7,11 @@ class Network(nn.Module):
 
         self.env = env
 
-        self.n_obs = env.observation_space.shape[0]
+        try:
+            self.n_obs = env.observation_space.shape[0]
+        except:
+            self.n_obs = 1
+
         try:
             self.n_acts = env.action_space.shape[0]
         except:

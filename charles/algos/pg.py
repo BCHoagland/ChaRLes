@@ -8,7 +8,7 @@ class PG(Algorithm):
         self.type = 'on-policy'
         self.color = [0, 85, 135]
 
-        self.π = Model(CategoricalPolicy(self.env), 1e-3)
+        self.π = Model(StochasticPolicy(self.env), 1e-3)
 
     def interact(self, s):
         a = self.π(s)

@@ -1,1 +1,1 @@
-from charles.storage.storage import *
+from charles.storage.storage import Storage

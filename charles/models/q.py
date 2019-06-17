@@ -43,3 +43,18 @@ class V(Network):
 
     def forward(self, s):
         return self.main(s)
+
+class DQNNet(Network):
+    def __init__(self, env):
+        super().__init__(env)
+
+        self.main = nn.Sequential(
+            nn.Linear(self.n_obs, 64),
+            nn.ELU(),
+            nn.Linear(64, 64),
+            nn.ELU(),
+            nn.Linear(64, self.n_acts)
+        )
+
+    def forward(self, s):
+        return self.main(s)

@@ -11,9 +11,10 @@ class Storage:
     def store(self, data):
         '''stored a single group of data'''
         def fix(x):
-            if isinstance(x, bool): return 1 - x
-            if not isinstance(x, np.ndarray): return np.array(x)
-            else: return x
+            if isinstance(x, bool): x = 1 - x
+            if not isinstance(x, np.ndarray): x = np.array(x)
+            if len(x.shape) == 0: x = np.expand_dims(x, axis=0)
+            return x
 
         transition = tuple(fix(x) for x in data)
         self.buffer.append(transition)

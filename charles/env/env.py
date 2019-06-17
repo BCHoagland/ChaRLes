@@ -1,5 +1,6 @@
 import gym
 import torch
+import numpy as np
 
 class Env:
     def __init__(self, env_name):
@@ -15,10 +16,26 @@ class Env:
             self.action_space.high = None
 
     def reset(self):
-        return self.env.reset()
+        s = self.env.reset()
+        if len(np.array(s).shape) == 0:
+            s = np.expand_dims(s, axis=0)
+        return s
 
     def step(self, a):
-        return self.env.step(a.numpy())
+        if len(np.array(a).shape) == 0:
+            a = torch.FloatTensor([a])
+        else:
+            a = torch.FloatTensor(a)
+
+        if self.env.action_space.__class__.__name__ == 'Discrete':
+            a = int(a.item())
+        else:
+            a = a.numpy()
+
+        s2, r, done, info = self.env.step(a)
+        if len(np.array(s2).shape) == 0:
+            s2 = np.expand_dims(s2, axis=0)
+        return s2, r, done, info
 
     def render(self):
         return self.env.render()

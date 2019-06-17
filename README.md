@@ -9,7 +9,8 @@ ChaRLes is my personal library for implementing Deep RL algorithms and running e
 - [x] Proximal Policy Optimization (PPO)
 
 #### Off-Policy
-- [ ] Deep Q Learning (DQN)
+- [x] Deep Q Learning (DQN)
+- [x] Double DQN (DDQN)
 - [x] Deep Deterministic Policy Gradient (DDPG)
 - [x] Twin Dueling DDPG (TD3)
 - [x] Soft Actor-Critic (SAC) ***(continuous actions only)***

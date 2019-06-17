@@ -21,10 +21,15 @@ class Agent:
         self.algo.agent = self
         self.algo.setup()
 
+        try:
+            self.algo_vis_modifier = '-' + str(config.vis_modifier)
+        except:
+            self.algo_vis_modifier = ''
+
     def explore(self):
         s = self.env.reset()
         for step in range(int(10000)):
-            a = torch.FloatTensor(self.env.action_space.sample())
+            a = self.env.action_space.sample()
             s2, r, done, _ = self.env.step(a)
             self.storage.store((s, a, r, s2, done))
             s = self.env.reset() if done else s2
@@ -46,7 +51,7 @@ class Agent:
                     s = self.env.reset()
                     ep += 1
                     if ep % self.config.vis_iter == 0:
-                        self.visualizer.update_viz(ep, ep_reward, self.config.env, self.algo.name, self.algo.color)
+                        self.visualizer.update_viz(ep, ep_reward, self.config.env, self.algo.name + self.algo_vis_modifier, self.algo.color)
                     ep_reward = 0
                 t += 1
 
