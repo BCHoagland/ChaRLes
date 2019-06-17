@@ -8,8 +8,8 @@ class PPO(Algorithm):
         self.type = 'on-policy'
         self.color = [153, 51, 153]
 
-        self.π = Model(StochasticPolicy(self.env), 1e-3)
-        self.V = Model(V(self.env), 1e-3)
+        self.π = Model(StochasticPolicy, self.env, 1e-3)
+        self.V = Model(V, self.env, 1e-3)
 
     def interact(self, s):
         a = self.π(s)
@@ -29,7 +29,7 @@ class PPO(Algorithm):
             for i in reversed(range(len(r))):
                 returns[i] = r[i] + discounted_next
                 discounted_next = 0.99 * returns[i] * m[i - 1]
-            returns = torch.FloatTensor(returns).unsqueeze(1)
+            returns = torch.stack(returns)
 
             # calculate and normalize advantage
             adv = returns - v

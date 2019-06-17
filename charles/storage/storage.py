@@ -11,7 +11,7 @@ class Storage:
     def store(self, data):
         '''stored a single group of data'''
         def fix(x):
-            if isinstance(x, bool): x = 1 - x
+            if isinstance(x[0], np.bool_): x = 1 - x
             if not isinstance(x, np.ndarray): x = np.array(x)
             if len(x.shape) == 0: x = np.expand_dims(x, axis=0)
             return x
@@ -30,7 +30,7 @@ class Storage:
         max_dim = max([len(d.shape) for d in data])
         for i in range(len(data)):
             while len(data[i].shape) < max_dim:
-                data[i].unsqueeze_(1)
+                data[i].unsqueeze_(2)
         return data
 
     def get_all(self):

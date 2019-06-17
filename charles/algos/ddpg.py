@@ -8,8 +8,8 @@ class DDPG(Algorithm):
         self.type = 'off-policy'
         self.color = [200, 78, 0]
 
-        self.μ = Model(DeterministicPolicy(self.env), 1e-3, target=True)
-        self.Q = Model(Q(self.env), 1e-4, target=True)
+        self.μ = Model(DeterministicPolicy, self.env, 1e-3, target=True)
+        self.Q = Model(Q, self.env, 1e-4, target=True)
 
         self.explore()
 

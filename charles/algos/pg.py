@@ -8,7 +8,7 @@ class PG(Algorithm):
         self.type = 'on-policy'
         self.color = [0, 85, 135]
 
-        self.π = Model(StochasticPolicy(self.env), 1e-3)
+        self.π = Model(StochasticPolicy, self.env, 1e-3)
 
     def interact(self, s):
         a = self.π(s)
@@ -27,7 +27,7 @@ class PG(Algorithm):
             discounted_next = 0.99 * returns[i] * m[i - 1]
 
         # normalize returns
-        returns = torch.FloatTensor(returns)
+        returns = torch.stack(returns)
         mean = returns.mean()
         std = returns.std()
         returns = (returns - mean) / (std + 1e-6)

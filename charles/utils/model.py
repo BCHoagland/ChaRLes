@@ -1,10 +1,11 @@
 import torch
-from copy import deepcopy
 
 class Model:
-    def __init__(self, model, lr, target=False, τ=0.995, optim=torch.optim.Adam):
-        self.model = model
-        if target: self.target_model = deepcopy(model)
+    def __init__(self, model_type, env, lr, target=False, τ=0.995, optim=torch.optim.Adam):
+        self.model = model_type(env)
+        if target:
+            self.target_model = model_type(env)
+            self.target_model.load_state_dict(self.model.state_dict())
         self.τ = τ
         self.optimizer = optim(self.model.parameters(), lr=lr)
 

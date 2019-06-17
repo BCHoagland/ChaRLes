@@ -1,10 +1,17 @@
 import gym
 import torch
 import numpy as np
+from baselines.common.vec_env.subproc_vec_env import SubprocVecEnv
+
+def make_env(id):
+    def _f():
+        return gym.make(id)
+    return _f
 
 class Env:
-    def __init__(self, env_name):
-        self.env = gym.make(env_name)
+    def __init__(self, env_name, actors):
+        # self.env = gym.make(env_name)
+        self.env = SubprocVecEnv([make_env(env_name) for _ in range(actors)])
         self.observation_space = self.env.observation_space
         self.action_space = self.env.action_space
 
@@ -22,15 +29,15 @@ class Env:
         return s
 
     def step(self, a):
-        if len(np.array(a).shape) == 0:
-            a = torch.FloatTensor([a])
-        else:
-            a = torch.FloatTensor(a)
+        # if len(np.array(a).shape) == 0:
+        #     a = torch.FloatTensor([a])
+        # else:
+        #     a = torch.FloatTensor(a)
 
-        if self.env.action_space.__class__.__name__ == 'Discrete':
-            a = int(a.item())
-        else:
-            a = a.numpy()
+        # if self.env.action_space.__class__.__name__ == 'Discrete':
+        #     a = int(a.item())
+        # else:
+        #     a = a.numpy()
 
         s2, r, done, info = self.env.step(a)
         if len(np.array(s2).shape) == 0:

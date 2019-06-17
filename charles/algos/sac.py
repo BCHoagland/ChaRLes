@@ -11,9 +11,10 @@ class SAC(Algorithm):
 
         self.env_wrappers = [TanhAction]
 
-        self.π = Model(TanhPolicy(self.env), 3e-4)
-        self.Q1 = Model(Q(self.env), 3e-4, target=True)
-        self.Q2 = Model(Q(self.env), 3e-4, target=True)
+        self.π = Model(TanhPolicy, self.env, 3e-4)
+        self.Q1 = Model(Q, self.env, 3e-4, target=True)
+        self.Q2 = Model(Q, self.env, 3e-4, target=True)
+        
         self.α = LearnableParam(0.2, 1e-4)
         self.target_entropy = -torch.prod(torch.FloatTensor(self.env.action_space.shape)).item()
 

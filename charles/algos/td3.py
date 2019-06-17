@@ -8,9 +8,9 @@ class TD3(Algorithm):
         self.type = 'off-policy'
         self.color = [232, 153, 35]
 
-        self.μ = Model(DeterministicPolicy(self.env), 1e-3, target=True)
-        self.Q1 = Model(Q(self.env), 1e-4, target=True)
-        self.Q2 = Model(Q(self.env), 1e-4, target=True)
+        self.μ = Model(DeterministicPolicy, self.env, 1e-3, target=True)
+        self.Q1 = Model(Q, self.env, 1e-4, target=True)
+        self.Q2 = Model(Q, self.env, 1e-4, target=True)
 
         self.updates = 0
 

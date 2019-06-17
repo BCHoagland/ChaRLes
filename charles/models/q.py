@@ -27,7 +27,7 @@ class Q(Network):
     def forward(self, s, a):
         s = self.pre_state(s)
         a = self.pre_action(a)
-        return self.main(torch.cat([s, a], 1))
+        return self.main(torch.cat([s, a], 2))
 
 class V(Network):
     def __init__(self, env):
