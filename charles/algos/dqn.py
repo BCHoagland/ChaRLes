@@ -16,9 +16,9 @@ class DQN(Algorithm):
 
     def interact(self, s):
         if random.random() < 0.05:
-            a = np.stack([self.env.action_space.sample() for _ in range(self.config.actors)])
+            a = self.random_action()
         else:
-            a = np.argmax(self.Q(s), axis=1).numpy()
+            a = np.argmax(self.Q(s), axis=1)
 
         s2, r, done, _ = self.env.step(a)
         data = (s, a, r, s2, done)

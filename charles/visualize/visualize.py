@@ -29,8 +29,6 @@ class Visualizer:
         self.env_name = env_name
         self.visdom = Visdom()
 
-        self.reset_all_data()
-
     def get_lines_for_algo(self, data, algo_name):
         color = data['color']
         x = data['x']
@@ -112,11 +110,11 @@ class Visualizer:
             data += self.get_lines_for_algo(saved_data[algo], algo)
 
         # set format for the plot
-        title = self.env_name + ' (' + algo_name + ')'
+        title = self.env_name
         layout = dict(
             title=title,
             xaxis={'title': xlabel},
-            # yaxis={'title': }
+            yaxis={'title': data_type}
         )
 
         # plot the data

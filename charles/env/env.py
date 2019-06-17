@@ -10,7 +10,6 @@ def make_env(id):
 
 class Env:
     def __init__(self, env_name, actors):
-        # self.env = gym.make(env_name)
         self.env = SubprocVecEnv([make_env(env_name) for _ in range(actors)])
         self.observation_space = self.env.observation_space
         self.action_space = self.env.action_space
@@ -35,6 +34,8 @@ class Env:
         return s2, r, done, info
 
     def step(self, a):
+        if isinstance(a, torch.Tensor):
+            a = a.numpy()
         s2, r, done, info = self.env.step(a)
         if len(np.array(s2).shape) == 0:
             s2 = np.expand_dims(s2, axis=0)

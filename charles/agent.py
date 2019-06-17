@@ -7,10 +7,8 @@ from charles.visualize import *
 class Agent:
     def __init__(self, algo, config):
         self.env = Env(config.env, config.actors)
-
         self.visualizer = Visualizer(config.env)
         self.config = config
-
         self.storage = Storage(config)
 
         self.algo = algo()
@@ -24,10 +22,15 @@ class Agent:
                 self.env = env_wrapper(self.env)
         self.algo.setup()
 
+        self.visualizer.reset_data_for_algo(self.algo.name)
+
+    def random_action(self):
+        return np.stack([self.env.action_space.sample() for _ in range(self.config.actors)])
+
     def explore(self):
         s = self.env.reset()
         for step in range(int(10000)):
-            a = np.stack([self.env.action_space.sample() for _ in range(self.config.actors)])
+            a = self.random_action()
             s2, r, done, _ = self.env.explore_step(a)
             self.storage.store((s, a, r, s2, done))
             s = s2
