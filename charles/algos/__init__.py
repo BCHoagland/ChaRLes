@@ -1,4 +1,5 @@
 from charles.algos.pg import PG
+from charles.algos.a2c import A2C
 from charles.algos.dqn import DQN
 from charles.algos.ddqn import DDQN
 from charles.algos.ddpg import DDPG

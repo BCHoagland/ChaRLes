@@ -29,7 +29,7 @@ class Agent:
 
     def explore(self):
         s = self.env.reset()
-        for step in range(int(10000)):
+        for step in range(int(self.config.explore_steps)):
             a = self.random_action()
             s2, r, done, _ = self.env.explore_step(a)
             self.storage.store((s, a, r, s2, done))

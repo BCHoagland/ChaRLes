@@ -24,7 +24,8 @@ class CategoricalPolicy(Network):
         return a
 
     def log_prob(self, s, a):
-        return self.dist(s).log_prob(a)
+        # return self.dist(s).log_prob(a)
+        return self.dist(s).log_prob(a.squeeze()).unsqueeze(2)
 
 class StochasticPolicy(Network):
     def __init__(self, env):
