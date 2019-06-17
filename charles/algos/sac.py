@@ -4,17 +4,17 @@ from charles.env import *
 from charles.utils import *
 
 class SAC(Algorithm):
-    def setup(self):
+    def __init__(self):
         self.name = 'SAC'
         self.type = 'off-policy'
         self.color = [51, 152, 152]
-
         self.env_wrappers = [TanhAction]
 
+    def setup(self):
         self.π = Model(TanhPolicy, self.env, 3e-4)
         self.Q1 = Model(Q, self.env, 3e-4, target=True)
         self.Q2 = Model(Q, self.env, 3e-4, target=True)
-        
+
         self.α = LearnableParam(0.2, 1e-4)
         self.target_entropy = -torch.prod(torch.FloatTensor(self.env.action_space.shape)).item()
 

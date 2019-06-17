@@ -3,11 +3,12 @@ from charles.models import *
 from charles.utils import *
 
 class PG(Algorithm):
-    def setup(self):
+    def __init__(self):
         self.name = 'PG'
         self.type = 'on-policy'
         self.color = [0, 85, 135]
 
+    def setup(self):
         self.π = Model(StochasticPolicy, self.env, 1e-3)
 
     def interact(self, s):

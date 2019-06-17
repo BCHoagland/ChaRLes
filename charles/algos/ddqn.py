@@ -4,11 +4,12 @@ from charles.models import *
 from charles.utils import *
 
 class DDQN(Algorithm):
-    def setup(self):
+    def __init__(self):
         self.name = 'DDQN'
         self.type = 'off-policy'
         self.color = [248, 136, 112]
 
+    def setup(self):
         self.Q1 = Model(DQNNet, self.env, 1e-3, target=True)
         self.Q2 = Model(DQNNet, self.env, 1e-3, target=True)
 

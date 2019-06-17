@@ -28,17 +28,13 @@ class Env:
             s = np.expand_dims(s, axis=0)
         return s
 
+    def explore_step(self, a):
+        s2, r, done, info = self.env.step(a)
+        if len(np.array(s2).shape) == 0:
+            s2 = np.expand_dims(s2, axis=0)
+        return s2, r, done, info
+
     def step(self, a):
-        # if len(np.array(a).shape) == 0:
-        #     a = torch.FloatTensor([a])
-        # else:
-        #     a = torch.FloatTensor(a)
-
-        # if self.env.action_space.__class__.__name__ == 'Discrete':
-        #     a = int(a.item())
-        # else:
-        #     a = a.numpy()
-
         s2, r, done, info = self.env.step(a)
         if len(np.array(s2).shape) == 0:
             s2 = np.expand_dims(s2, axis=0)
@@ -51,9 +47,12 @@ class Env:
         return self.env.close()
 
 class TanhAction(Env):
-    def __init__(self, env_name):
-        super().__init__(env_name)
+    def __init__(self, env):
+        self.env = env
+
+    def __getattr__(self, k):
+        return getattr(self.env, k)
 
     def step(self, a):
-        a = a = ((a + 1) / 2) * (self.action_space.max - self.action_space.min) + self.action_space.min
-        return super().step(a)
+        a = ((torch.FloatTensor(a) + 1) / 2) * (self.env.action_space.high - self.env.action_space.low) + self.env.action_space.low
+        return self.env.step(a)
