@@ -1,7 +1,6 @@
 from charles.algorithm import Algorithm
 from charles.models import *
 from charles.env import *
-from charles.utils import *
 
 class SAC(Algorithm):
     def __init__(self):
@@ -11,11 +10,11 @@ class SAC(Algorithm):
         self.env_wrappers = [TanhAction]
 
     def setup(self):
-        self.π = Model(TanhPolicy, self.env, 3e-4)
-        self.Q1 = Model(Q, self.env, 3e-4, target=True)
-        self.Q2 = Model(Q, self.env, 3e-4, target=True)
+        self.π = Model(TanhPolicy, self.env, self.config.lr)
+        self.Q1 = Model(Q, self.env, self.config.lr, target=True)
+        self.Q2 = Model(Q, self.env, self.config.lr, target=True)
 
-        self.α = LearnableParam(0.2, 1e-4)
+        self.α = LearnableParam(0.2, self.config.lr)
         self.target_entropy = -torch.prod(torch.FloatTensor(self.env.action_space.shape)).item()
 
         self.explore()

@@ -1,6 +1,5 @@
 from charles.algorithm import Algorithm
 from charles.models import *
-from charles.utils import *
 
 class TD3(Algorithm):
     def __init__(self):
@@ -9,16 +8,16 @@ class TD3(Algorithm):
         self.color = [232, 153, 35]
 
     def setup(self):
-        self.μ = Model(DeterministicPolicy, self.env, 1e-3, target=True)
-        self.Q1 = Model(Q, self.env, 1e-4, target=True)
-        self.Q2 = Model(Q, self.env, 1e-4, target=True)
+        self.μ = Model(DeterministicPolicy, self.env, self.config.lr, target=True)
+        self.Q1 = Model(Q, self.env, self.config.lr, target=True)
+        self.Q2 = Model(Q, self.env, self.config.lr, target=True)
 
         self.updates = 0
 
         self.explore()
 
     def interact(self, s):
-        a = noisy_action(self.μ(s), 0.15, self.env)
+        a = self.noisy_action(self.μ(s), 0.15)
 
         s2, r, done, _ = self.env.step(a)
         data = (s, a, r, s2, done)
@@ -27,7 +26,7 @@ class TD3(Algorithm):
     def update(self, storage):
         s, a, r, s2, m = storage.sample()
 
-        a2 = noisy_action(self.μ.target(s2), 0.15, self.env, clip=0.5)
+        a2 = self.noisy_action(self.μ.target(s2), 0.15, clip=0.5)
         min_next_q = torch.min(self.Q1.target(s2, a2), self.Q2.target(s2, a2))
         y = r + (0.99 * m * min_next_q)
 

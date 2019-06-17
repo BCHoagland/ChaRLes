@@ -1,6 +1,5 @@
 from charles.algorithm import Algorithm
 from charles.models import *
-from charles.utils import *
 
 class A2C(Algorithm):
     def __init__(self):
@@ -9,8 +8,8 @@ class A2C(Algorithm):
         self.color = [115, 194, 251]
 
     def setup(self):
-        self.π = Model(CategoricalPolicy, self.env, 1e-3)
-        self.V = Model(V, self.env, 1e-3)
+        self.π = Model(CategoricalPolicy, self.env, self.config.lr)
+        self.V = Model(V, self.env, self.config.lr)
 
     def interact(self, s):
         a = self.π(s)

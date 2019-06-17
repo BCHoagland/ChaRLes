@@ -27,6 +27,12 @@ class Agent:
     def random_action(self):
         return np.stack([self.env.action_space.sample() for _ in range(self.config.actors)])
 
+    def noisy_action(self, a, std, clip=None):
+        noise = np.random.normal(0, std)
+        if clip is not None:
+            noise = np.clip(noise, -clip, clip)
+        return np.clip(a.numpy() + noise, self.env.action_space.low, self.env.action_space.high)
+
     def explore(self):
         s = self.env.reset()
         for step in range(int(self.config.explore_steps)):

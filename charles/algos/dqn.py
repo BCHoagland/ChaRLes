@@ -1,7 +1,6 @@
 import random
 from charles.algorithm import Algorithm
 from charles.models import *
-from charles.utils import *
 
 class DQN(Algorithm):
     def __init__(self):
@@ -10,7 +9,7 @@ class DQN(Algorithm):
         self.color = [254, 127, 156]
 
     def setup(self):
-        self.Q = Model(DQNNet, self.env, 1e-3, target=True)
+        self.Q = Model(DQNNet, self.env, self.config.lr, target=True)
 
         self.explore()
 

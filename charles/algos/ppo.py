@@ -1,6 +1,5 @@
 from charles.algorithm import Algorithm
 from charles.models import *
-from charles.utils import *
 
 class PPO(Algorithm):
     def __init__(self):
@@ -9,8 +8,8 @@ class PPO(Algorithm):
         self.color = [153, 51, 153]
 
     def setup(self):
-        self.π = Model(StochasticPolicy, self.env, 1e-3)
-        self.V = Model(V, self.env, 1e-3)
+        self.π = Model(StochasticPolicy, self.env, self.config.lr)
+        self.V = Model(V, self.env, self.config.lr)
 
     def interact(self, s):
         a = self.π(s)

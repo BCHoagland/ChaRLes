@@ -1,6 +1,5 @@
 from charles.algorithm import Algorithm
 from charles.models import *
-from charles.utils import *
 
 class DDPG(Algorithm):
     def __init__(self):
@@ -9,13 +8,13 @@ class DDPG(Algorithm):
         self.color = [200, 78, 0]
 
     def setup(self):
-        self.μ = Model(DeterministicPolicy, self.env, 1e-3, target=True)
-        self.Q = Model(Q, self.env, 1e-4, target=True)
+        self.μ = Model(DeterministicPolicy, self.env, self.config.lr, target=True)
+        self.Q = Model(Q, self.env, self.config.lr, target=True)
 
         self.explore()
 
     def interact(self, s):
-        a = noisy_action(self.μ(s), 0.15, self.env)
+        a = self.noisy_action(self.μ(s), 0.15)
 
         s2, r, done, _ = self.env.step(a)
         data = (s, a, r, s2, done)
