@@ -8,7 +8,7 @@ class PG(Algorithm):
         self.color = [0, 85, 135]
 
     def setup(self):
-        self.π = Model(StochasticPolicy, self.env, self.config.lr)
+        self.π = Model(CategoricalPolicy, self.env, self.config.lr)
 
     def interact(self, s):
         a = self.π(s)

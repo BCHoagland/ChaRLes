@@ -33,7 +33,7 @@ class Visualizer:
         color = data['color']
         x = data['x']
         lower_line = get_line(x, data['y']['lower'], 'lower', color='rgba(' + color + ', 0.2)')
-        mean_line = get_line(x, data['y']['mean'], algo_name, color='rgb(' + color + ')', width=2, showlegend=True)
+        mean_line = get_line(x, data['y']['mean'], algo_name, color='rgb(' + color + ')', width=1.4, showlegend=True)
         upper_line = get_line(x, data['y']['upper'], 'upper', color='rgba(' + color + ', 0.2)', isFilled=True, fillcolor='rgba(' + color + ', 0.1)')
         return [lower_line, upper_line, mean_line]
 

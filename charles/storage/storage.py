@@ -5,7 +5,10 @@ from collections import deque
 
 class Storage:
     def __init__(self, config):
-        self.buffer = deque(maxlen=config.storage_size)
+        try:
+            self.buffer = deque(maxlen=int(config.storage_size))
+        except:
+            self.buffer = deque()
         self.config = config
 
     def store(self, data):
