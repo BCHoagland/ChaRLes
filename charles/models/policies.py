@@ -3,6 +3,20 @@ import torch.nn as nn
 from torch.distributions import Normal, Categorical
 from charles.models.base import Network
 
+class LinearPolicy:
+    def __init__(self, env):
+
+        if env.action_space.__class__.__name__ == 'Discrete':
+            self.net = CategoricalPolicy(env)
+        else:
+            self.net = StochasticPolicy(env)
+
+    def __getattr__(self, k):
+        return getattr(self.net, k)
+
+    def __call__(self, *args):
+        return self.net(*args)
+
 class CategoricalPolicy(Network):
     def __init__(self, env):
         super().__init__(env)
@@ -24,8 +38,20 @@ class CategoricalPolicy(Network):
         return a
 
     def log_prob(self, s, a):
-        # return self.dist(s).log_prob(a)
-        return self.dist(s).log_prob(a.squeeze()).unsqueeze(2)
+        orig_s_shape = s.shape
+        s = s.squeeze()
+        a = a.squeeze()
+        if len(s.shape) == 0:
+            s = s.unsqueeze(0)
+        if len(a.shape) == 0:
+            a = a.unsqueeze(0)
+
+        log_p = self.dist(s).log_prob(a)
+
+        while len(orig_s_shape) > len(log_p.shape):
+            log_p = log_p.unsqueeze(len(log_p.shape))
+
+        return log_p
 
 class StochasticPolicy(Network):
     def __init__(self, env):

@@ -8,7 +8,7 @@ class A2C(Algorithm):
         self.color = [115, 194, 251]
 
     def setup(self):
-        self.π = Model(CategoricalPolicy, self.env, self.config.lr)
+        self.π = Model(LinearPolicy, self.env, self.config.lr)
         self.V = Model(V, self.env, self.config.lr)
 
     def interact(self, s):

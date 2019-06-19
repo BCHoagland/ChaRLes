@@ -24,6 +24,11 @@ class Agent:
 
         self.visualizer.reset_data_for_algo(self.algo.name)
 
+        try:
+            self.vis_title = config.vis_title
+        except:
+            self.vis_title = None
+
     def random_action(self):
         return np.stack([self.env.action_space.sample() for _ in range(self.config.actors)])
 
@@ -42,6 +47,8 @@ class Agent:
             s = s2
 
     def train(self):
+        mean_r = np.zeros(self.config.actors)
+
         total_timesteps = 0
 
         ep_reward = np.zeros(self.config.actors)
@@ -60,6 +67,8 @@ class Agent:
                 s = s2
 
                 # update stored rewards
+                mean_r += (1 / (total_timesteps + 1)) * (r - mean_r)
+
                 ep_reward += r
                 mask = 1 - done
                 final_ep_reward *= mask
@@ -70,6 +79,9 @@ class Agent:
                 total_timesteps += 1
                 if total_timesteps % self.config.vis_iter == 0:
                     self.visualizer.plot(self.algo.name, 'Episodic Reward', 'Timesteps', total_timesteps, final_ep_reward, self.algo.color)
+                    # self.visualizer.plot(self.algo.name, 'Mean Reward', 'Timesteps', total_timesteps, mean_r, self.algo.color, title=self.vis_title)
+                    # self.visualizer.plot(self.algo.name, 'Instances', 'Timesteps', total_timesteps, data[0][0][-2], self.algo.color, title='Num Instances')
+                    # self.visualizer.plot(self.algo.name, 'Requests', 'Timesteps', total_timesteps, data[0][0][-1], self.algo.color, title='Num Active Requests')
 
             # run updates after trajectory has been collected
             for _ in range(self.config.epochs):

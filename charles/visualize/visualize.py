@@ -1,10 +1,11 @@
 import numpy as np
 import torch
+from math import isnan
 from visdom import Visdom
 import pickle
 from pathlib import Path
 
-def get_line(x, y, name, color='transparent', isFilled=False, fillcolor='transparent', width=1, showlegend=False):
+def get_line(x, y, name, color='transparent', isFilled=False, fillcolor='transparent', width=0.4, showlegend=False):
         if isFilled:
             fill = 'tonexty'
         else:
@@ -33,7 +34,7 @@ class Visualizer:
         color = data['color']
         x = data['x']
         lower_line = get_line(x, data['y']['lower'], 'lower', color='rgba(' + color + ', 0.2)')
-        mean_line = get_line(x, data['y']['mean'], algo_name, color='rgb(' + color + ')', width=1.4, showlegend=True)
+        mean_line = get_line(x, data['y']['mean'], algo_name, color='rgb(' + color + ')', width=1.6, showlegend=True)
         upper_line = get_line(x, data['y']['upper'], 'upper', color='rgba(' + color + ', 0.2)', isFilled=True, fillcolor='rgba(' + color + ', 0.1)')
         return [lower_line, upper_line, mean_line]
 
@@ -84,17 +85,20 @@ class Visualizer:
             with open(filepath, 'wb') as f:
                 pickle.dump(saved_data, f)
 
-    def plot(self, algo_name, data_type, xlabel, x, y, color=[5, 119, 177]):
+    def plot(self, algo_name, data_type, xlabel, x, y, color=[5, 119, 177], title=None):
         color = f'{color[0]}, {color[1]}, {color[2]}'
+        title = self.env_name if title is None else self.env_name + f'({title})'
 
         # get the filepath, creating directories as necessary
         path = Path('.tmp/plot_data/')
         path.mkdir(parents=True, exist_ok=True)
-        filepath = f'{path}/{data_type + self.env_name}'
+        filepath = f'{path}/{data_type + title}'
 
         # convert y to the format (y.mu, y.std) if it's not already
         if not isinstance(y, tuple):
-            y = (y.mean(), y.std())
+            std = y.std()
+            std = torch.zeros(1).squeeze() if isnan(std) else std
+            y = (y.mean(), std)
 
         # update and retrieve saved data
         try:
@@ -110,7 +114,6 @@ class Visualizer:
             data += self.get_lines_for_algo(saved_data[algo], algo)
 
         # set format for the plot
-        title = self.env_name
         layout = dict(
             title=title,
             xaxis={'title': xlabel},
@@ -118,4 +121,4 @@ class Visualizer:
         )
 
         # plot the data
-        self.visdom._send({'data': data, 'layout': layout, 'win': title + self.env_name})
+        self.visdom._send({'data': data, 'layout': layout, 'win': title + data_type})

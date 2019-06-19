@@ -4,12 +4,12 @@ ChaRLes is my personal library for implementing Deep RL algorithms and running e
 
 ## Supported Algorithms
 
-#### On-Policy
+### On-Policy
 - [x] Policy Gradient (PG)
 - [x] Advantage Actor Critic (A2C)
 - [x] Proximal Policy Optimization (PPO)
 
-#### Off-Policy
+### Off-Policy
 - [x] Deep Q Learning (DQN)
 - [x] Double DQN (DDQN)
 - [x] Deep Deterministic Policy Gradient (DDPG)
@@ -20,13 +20,14 @@ ChaRLes is my personal library for implementing Deep RL algorithms and running e
 
 
 ## Usage
-Visdom must be running prior to training.
+From the top level of the ChaRLes directory, run `pip install -e .` to install the `charles` package on your machine.
 
-From the top level of the ChaRLes directory, create a file and include `from charles import *` at the top. This imports the various algorithm classes and allows you to construct an agent.
 
-To train an agent, create a config class and give it the necessary environment information and hyperparameters as fields. Pass the class of the algorithm you want and the config class you just made into a new Agent, then invoke `agent.train()`
+Include the line `from charles import *` in any file to give that file access to the library. This gives the file access to the Agent class and every algorithm defined in `charles.algos`
 
-##### Example: train.py
+To train an agent, start up Visdom in the background. Then create a class and give it the necessary environment information and hyperparameters as fields. Pass the class of the algorithm you want and the config class you just made into a new Agent, then invoke `agent.train()`
+
+#### Example: train.py
 ```python
 from charles import *
 
@@ -37,10 +38,10 @@ class Config:
     max_timesteps = 1e4
     trajectory_length = 1
     vis_iter = 500
-    storage_size = 1e6
+    storage_size = 1000000
     batch_size = 128
     epochs = 1
-    explore_steps = 1e4
+    explore_steps = 10000
 
 agent = Agent(SAC, Config)
 agent.train()
@@ -61,7 +62,7 @@ The following tests were conducted with 8 actors per training run. PG, A2C, and 
 
 ## Algorithm Details
 
-#### On-Policy
+### On-Policy
 * **Policy Gradient:** Policy gradients are really a class of algorithm, but what I've implemented is the Monte-Carlo variant of the classic REINFORCE algorithm using reward-to-go as a measure of return. Intuitively, it nudges the probability of actions in certain states in proportion to the return experienced after that state-action pair.
 
 * **Advantage Actor Critic:** A2C is the same as the base policy gradient, except it uses a value network to approximate the advantage and then uses this advantage estimate instead of reward-to-go in the policy gradient update. The value network is fitted by minimizing the mean squared error between the network's predictions and the actual returns received from the environment.
@@ -69,7 +70,7 @@ The following tests were conducted with 8 actors per training run. PG, A2C, and 
 * **Proximal Policy Optimization:** PPO attempts to maximize the difference between the performance of consecutive policies using first-order optimization techniques. This implementation clips advantage estimates to make it more likely that the new policy produced after every network update has similar performance to the previous policy. This stabilizes performance and helps prevent the policy from collapsing into a fatal policy space.
 
 
-#### Off-Policy
+### Off-Policy
 * **Deep Q Learning:** DQN attempts to select actions that maximize the environment's optimal Q-function. A network is fitted to estimates of the optimal Q-value at given state-action pairs. A replay buffer and a target Q-network (updated with Polyak averaging) are used to help stabilize training.
 
 * **Double DQNL:** DDQN addresses overestimation bias in the Q-function approximation by introducing a second Q-network. One network is used to the select actions that the other network evaluates when creating the regression targets.
