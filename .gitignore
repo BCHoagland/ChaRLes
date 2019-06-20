@@ -2,6 +2,3 @@ __pycache__
 .DS_Store
 charles.egg-info
 .tmp
-envs
-reverse.py
-real.py

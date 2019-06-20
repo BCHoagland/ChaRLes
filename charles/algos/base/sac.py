@@ -1,4 +1,4 @@
-from charles.algorithm import Algorithm
+from charles.algos.algorithm import Algorithm
 from charles.models import *
 from charles.env import *
 
@@ -29,8 +29,8 @@ class SAC(Algorithm):
         s, a, r, s2, m = storage.sample()
 
         with torch.no_grad():
-            a2, p2, = self.π.sample(s2)
-            min_next_q = torch.min(self.Q1.target(s2, a2), self.Q2.target(s2, a2))
+            a2, p2 = self.π.sample(s2)
+            min_next_q = torch.min(self.Q1.target(s2, a2), self.Q2.target(s2, a2)) - (self.α * p2)
             y = r + (0.99 * m * min_next_q)
 
         q1_loss = torch.pow(self.Q1(s, a) - y, 2).mean()

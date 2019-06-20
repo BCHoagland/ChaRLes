@@ -1,7 +1,5 @@
 from charles import *
 
-# TODO: run PPO on cartpole with batch size ~ 10 to get baseline
-
 class Config:
     env = 'Pendulum-v0'
     actors = 8

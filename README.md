@@ -16,7 +16,8 @@ ChaRLes is my personal library for implementing Deep RL algorithms and running e
 - [x] Twin Dueling DDPG (TD3)
 - [x] Soft Actor-Critic (SAC) ***(continuous actions only)***
 
-
+### Imitation Learning
+- [] Deep Q-Learning from Demonstrations (DQfD) *(WIP)*
 
 
 ## Usage
@@ -60,7 +61,7 @@ The following tests were conducted with 8 actors per training run. PG, A2C, and 
 
 
 
-## Algorithm Details
+## Base Algorithm Details
 
 ### On-Policy
 * **Policy Gradient:** Policy gradients are really a class of algorithm, but what I've implemented is the Monte-Carlo variant of the classic REINFORCE algorithm using reward-to-go as a measure of return. Intuitively, it nudges the probability of actions in certain states in proportion to the return experienced after that state-action pair.
@@ -80,3 +81,7 @@ The following tests were conducted with 8 actors per training run. PG, A2C, and 
 * **Twin Dueling DDPG:** TD3 introduces a series of improvements to DDPG that stabilize learning. It uses noisy action selection during regression target construction, double Q-learning, and delayed policy and target network updates to help keep the Q-networks accurate and to discourage the policy network from exploiting errors in the Q-network estimates.
 
 * **Soft Actor-Critic:** SAC attempts to maximize both the expected cumulative reward and the expected entropy of a stochastic policy. It uses double Q-learning to approximate the policy's soft Q-function (soft = additional entropy term), and it minimizes the KL divergence between the current policy and the exponential of the soft Q-function to improve policy performance in the future. This implementation also automatically tunes the temperature parameter used to weight how much expected entropy we want from our policy.
+
+## Other Algorithm Details
+
+* **Deep Q-Learning from Demonstrations:** DQfD uses transitions from an expert agent to train a new agent capable of similar performance. This new agent then continues to train on its own while sampling from a replay buffer containing both its own and the expert's transitions. Additional loss terms are introduced into the traditional DQN loss formulation to boost the importance of the expert's transitions and make the new agent's Q-network updates more accurate.

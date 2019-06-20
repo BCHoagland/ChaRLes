@@ -1,3 +1,2 @@
 from charles.algos import *
-
-from charles.agent import Agent
+from charles.agents import *

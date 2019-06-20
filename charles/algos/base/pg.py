@@ -1,4 +1,4 @@
-from charles.algorithm import Algorithm
+from charles.algos.algorithm import Algorithm
 from charles.models import *
 
 class PG(Algorithm):

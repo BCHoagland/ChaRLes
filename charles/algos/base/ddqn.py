@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from charles.algorithm import Algorithm
+from charles.algos.algorithm import Algorithm
 from charles.models import *
 
 class DDQN(Algorithm):
@@ -23,7 +23,7 @@ class DDQN(Algorithm):
 
         s2, r, done, _ = self.env.step(a)
         data = (s, a, r, s2, done)
-        return s2, r, done, (data)
+        return s2, r, done, data
 
     def update(self, storage):
         s, a, r, s2, m = storage.sample()
