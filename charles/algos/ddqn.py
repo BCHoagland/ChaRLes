@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from charles.algos.algorithm import Algorithm
+from charles.algorithm import Algorithm
 from charles.models import *
 
 class DDQN(Algorithm):

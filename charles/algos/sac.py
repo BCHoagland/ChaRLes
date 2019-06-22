@@ -1,4 +1,4 @@
-from charles.algos.algorithm import Algorithm
+from charles.algorithm import Algorithm
 from charles.models import *
 from charles.env import *
 

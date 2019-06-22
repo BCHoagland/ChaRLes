@@ -16,9 +16,6 @@ ChaRLes is my personal library for implementing Deep RL algorithms and running e
 - [x] Twin Dueling DDPG (TD3)
 - [x] Soft Actor-Critic (SAC) ***(continuous actions only)***
 
-### Imitation Learning
-- [] Deep Q-Learning from Demonstrations (DQfD) *(WIP)*
-
 
 ## Usage
 From the top level of the ChaRLes directory, run `pip install -e .` to install the `charles` package on your machine.
@@ -61,9 +58,9 @@ The following tests were conducted with 8 actors per training run. PG, A2C, and 
 
 
 
-## Base Algorithm Details
+## Algorithm Details
 
-### On-Policy
+### On-Policy Algorithms
 * **Policy Gradient:** Policy gradients are really a class of algorithm, but what I've implemented is the Monte-Carlo variant of the classic REINFORCE algorithm using reward-to-go as a measure of return. Intuitively, it nudges the probability of actions in certain states in proportion to the return experienced after that state-action pair.
 
 * **Advantage Actor Critic:** A2C is the same as the base policy gradient, except it uses a value network to approximate the advantage and then uses this advantage estimate instead of reward-to-go in the policy gradient update. The value network is fitted by minimizing the mean squared error between the network's predictions and the actual returns received from the environment.
@@ -71,7 +68,7 @@ The following tests were conducted with 8 actors per training run. PG, A2C, and 
 * **Proximal Policy Optimization:** PPO attempts to maximize the difference between the performance of consecutive policies using first-order optimization techniques. This implementation clips advantage estimates to make it more likely that the new policy produced after every network update has similar performance to the previous policy. This stabilizes performance and helps prevent the policy from collapsing into a fatal policy space.
 
 
-### Off-Policy
+### Off-Policy Algorithms
 * **Deep Q Learning:** DQN attempts to select actions that maximize the environment's optimal Q-function. A network is fitted to estimates of the optimal Q-value at given state-action pairs. A replay buffer and a target Q-network (updated with Polyak averaging) are used to help stabilize training.
 
 * **Double DQNL:** DDQN addresses overestimation bias in the Q-function approximation by introducing a second Q-network. One network is used to the select actions that the other network evaluates when creating the regression targets.
@@ -81,7 +78,3 @@ The following tests were conducted with 8 actors per training run. PG, A2C, and 
 * **Twin Dueling DDPG:** TD3 introduces a series of improvements to DDPG that stabilize learning. It uses noisy action selection during regression target construction, double Q-learning, and delayed policy and target network updates to help keep the Q-networks accurate and to discourage the policy network from exploiting errors in the Q-network estimates.
 
 * **Soft Actor-Critic:** SAC attempts to maximize both the expected cumulative reward and the expected entropy of a stochastic policy. It uses double Q-learning to approximate the policy's soft Q-function (soft = additional entropy term), and it minimizes the KL divergence between the current policy and the exponential of the soft Q-function to improve policy performance in the future. This implementation also automatically tunes the temperature parameter used to weight how much expected entropy we want from our policy.
-
-## Other Algorithm Details
-
-* **Deep Q-Learning from Demonstrations:** DQfD uses transitions from an expert agent to train a new agent capable of similar performance. This new agent then continues to train on its own while sampling from a replay buffer containing both its own and the expert's transitions. Additional loss terms are introduced into the traditional DQN loss formulation to boost the importance of the expert's transitions and make the new agent's Q-network updates more accurate.
