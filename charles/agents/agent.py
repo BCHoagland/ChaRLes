@@ -1,3 +1,4 @@
+import os
 import torch
 import numpy as np
 from charles.env import *
@@ -5,7 +6,7 @@ from charles.storage import *
 from charles.visualize import *
 
 class Agent:
-    def __init__(self, algo, config):
+    def __init__(self, algo, config, gif=False):
         self.env = Env(config.env, config.actors)
         self.visualizer = Visualizer(config.env)
         self.config = config
@@ -27,6 +28,8 @@ class Agent:
             self.vis_title = config.vis_title
         except:
             self.vis_title = None
+
+        self.gif = gif
 
     def random_action(self):
         return np.stack([self.env.action_space.sample() for _ in range(self.config.actors)])
@@ -86,8 +89,8 @@ class Agent:
                     progress(total_timesteps - 1, self.config.max_timesteps, 'Training')
                     self.visualizer.plot(self.algo.name, 'Episodic Reward', 'Timesteps', total_timesteps, final_ep_reward, self.algo.color)
                     # self.visualizer.plot(self.algo.name, 'Mean Reward', 'Timesteps', total_timesteps, mean_r, self.algo.color, title=self.vis_title)
-                    # self.visualizer.plot(self.algo.name, 'Instances', 'Timesteps', total_timesteps, data[1][0][-1], self.algo.color, title='Num Instances')
-                    # self.visualizer.plot(self.algo.name, 'Requests', 'Timesteps', total_timesteps, data[0][0][-1], self.algo.color, title='Num Active Requests')
+                    # self.visualizer.plot(self.algo.name, 'Instances', 'Timesteps', total_timesteps, s[0][0], self.algo.color, title='Num Instances')
+                    # self.visualizer.plot(self.algo.name, 'Requests', 'Timesteps', total_timesteps, s[0][1], self.algo.color, title='Num Active Requests')
 
             # run updates after trajectory has been collected
             for _ in range(self.config.epochs):
@@ -97,6 +100,9 @@ class Agent:
 
         if total_timesteps % self.config.vis_iter != 0:
             progress(total_timesteps - 1, int(self.config.max_timesteps), 'Training')
+
+        if self.gif:
+            os.system('gif-for-cli "party parrot"')
 
     def demo(self):
         ep_reward = np.zeros(self.config.actors)

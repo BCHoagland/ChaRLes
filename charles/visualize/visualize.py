@@ -87,7 +87,7 @@ class Visualizer:
 
     def plot(self, algo_name, data_type, xlabel, x, y, color=[5, 119, 177], title=None):
         color = f'{color[0]}, {color[1]}, {color[2]}'
-        title = self.env_name if title is None else self.env_name + f'({title})'
+        title = self.env_name if title is None else self.env_name + f' ({title})'
 
         # get the filepath, creating directories as necessary
         path = Path('.tmp/plot_data/')
