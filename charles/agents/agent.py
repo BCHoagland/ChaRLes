@@ -87,10 +87,12 @@ class Agent:
                 total_timesteps += 1
                 if total_timesteps % self.config.vis_iter == 0:
                     progress(total_timesteps - 1, self.config.max_timesteps, 'Training')
-                    self.visualizer.plot(self.algo.name, 'Episodic Reward', 'Timesteps', total_timesteps, final_ep_reward, self.algo.color)
-                    # self.visualizer.plot(self.algo.name, 'Mean Reward', 'Timesteps', total_timesteps, mean_r, self.algo.color, title=self.vis_title)
-                    # self.visualizer.plot(self.algo.name, 'Instances', 'Timesteps', total_timesteps, s[0][0], self.algo.color, title='Num Instances')
-                    # self.visualizer.plot(self.algo.name, 'Requests', 'Timesteps', total_timesteps, s[0][1], self.algo.color, title='Num Active Requests')
+                    if self.config.env == 'ServiceSim-v0' or self.config.env == 'RealService-v0':
+                        self.visualizer.plot(self.algo.name, 'Mean Reward', 'Timesteps', total_timesteps, mean_r, self.algo.color, title=self.vis_title)
+                        self.visualizer.plot(self.algo.name, 'Instances', 'Timesteps', total_timesteps, s[0][-2], self.algo.color, title='Num Instances')
+                        self.visualizer.plot(self.algo.name, 'Requests', 'Timesteps', total_timesteps, s[0][-1], self.algo.color, title='Num Active Requests')
+                    else:
+                        self.visualizer.plot(self.algo.name, 'Episodic Reward', 'Timesteps', total_timesteps, final_ep_reward, self.algo.color)
 
             # run updates after trajectory has been collected
             for _ in range(self.config.epochs):

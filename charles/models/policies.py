@@ -4,12 +4,12 @@ from torch.distributions import Normal, Categorical
 from charles.models.base import Network
 
 class LinearPolicy:
-    def __init__(self, env):
+    def __init__(self, env, n_obs=None):
 
         if env.action_space.__class__.__name__ == 'Discrete':
-            self.net = CategoricalPolicy(env)
+            self.net = CategoricalPolicy(env, n_obs)
         else:
-            self.net = StochasticPolicy(env)
+            self.net = StochasticPolicy(env, n_obs)
 
     def __getattr__(self, k):
         return getattr(self.net, k)
@@ -18,8 +18,8 @@ class LinearPolicy:
         return self.net(*args)
 
 class CategoricalPolicy(Network):
-    def __init__(self, env):
-        super().__init__(env)
+    def __init__(self, env, n_obs=None):
+        super().__init__(env, n_obs)
 
         self.mean = nn.Sequential(
             nn.Linear(self.n_obs, 64),
@@ -54,8 +54,8 @@ class CategoricalPolicy(Network):
         return log_p
 
 class StochasticPolicy(Network):
-    def __init__(self, env):
-        super().__init__(env)
+    def __init__(self, env, n_obs=None):
+        super().__init__(env, n_obs)
 
         self.mean = nn.Sequential(
             nn.Linear(self.n_obs, 64),
@@ -82,8 +82,8 @@ class StochasticPolicy(Network):
         return self.dist(s).log_prob(a)
 
 class DeterministicPolicy(Network):
-    def __init__(self, env):
-        super().__init__(env)
+    def __init__(self, env, n_obs=None):
+        super().__init__(env, n_obs)
 
         self.mean = nn.Sequential(
             nn.Linear(self.n_obs, 64),
@@ -100,8 +100,8 @@ class DeterministicPolicy(Network):
         return a
 
 class TanhPolicy(Network):
-    def __init__(self, env):
-        super().__init__(env)
+    def __init__(self, env, n_obs=None):
+        super().__init__(env, n_obs)
 
         self.main = nn.Sequential(
             nn.Linear(self.n_obs, 64),

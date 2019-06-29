@@ -3,8 +3,8 @@ import torch.nn as nn
 from charles.models.base import Network
 
 class Q(Network):
-    def __init__(self, env):
-        super().__init__(env)
+    def __init__(self, env, n_obs=None):
+        super().__init__(env, n_obs)
 
         self.pre_state = nn.Sequential(
             nn.Linear(self.n_obs, 64),
@@ -30,8 +30,8 @@ class Q(Network):
         return self.main(torch.cat([s, a], 2))
 
 class V(Network):
-    def __init__(self, env):
-        super().__init__(env)
+    def __init__(self, env, n_obs=None):
+        super().__init__(env, n_obs)
 
         self.main = nn.Sequential(
             nn.Linear(self.n_obs, 64),
@@ -45,8 +45,8 @@ class V(Network):
         return self.main(s)
 
 class DQNNet(Network):
-    def __init__(self, env):
-        super().__init__(env)
+    def __init__(self, env, n_obs=None):
+        super().__init__(env, n_obs)
 
         self.main = nn.Sequential(
             nn.Linear(self.n_obs, 64),

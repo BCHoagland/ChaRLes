@@ -2,10 +2,10 @@ import numpy as np
 import torch
 
 class Model:
-    def __init__(self, model_type, env, lr, target=False, τ=0.995, optim=torch.optim.Adam):
-        self.model = model_type(env)
+    def __init__(self, model_type, env, lr, n_obs=None, target=False, τ=0.995, optim=torch.optim.Adam):
+        self.model = model_type(env, n_obs)
         if target:
-            self.target_model = model_type(env)
+            self.target_model = model_type(env, n_obs)
             self.target_model.load_state_dict(self.model.state_dict())
         self.τ = τ
         self.optimizer = optim(self.model.parameters(), lr=lr)
