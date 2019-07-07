@@ -1,8 +1,26 @@
 import sys
-from termcolor import colored
+from time import sleep
 
 emojis = ['\N{winking face}', '\U0001F923', '\U0001F643', '\U0001F989', '\U0001F995', '\U0001F996', '\U0001F433', '\U0001F30E', '\U00002604', '\U0001F495']
 # phases of moon
+
+borat = 'You will never get this'
+
+def colored(text, rgb):
+    return f'\x1b[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m{text}\x1b[0m'
+
+def out(action, bar, percent, color, done=False):
+    spaces = ' ' * (len(borat) + 2)
+    done = f'{spaces}\n' if done is True else ''
+    sys.stdout.write('\r%s |%s| ' % (action.ljust(30), bar) + colored('{0:.0f}%'.format(percent) + done, color))
+
+def rainbow_bar(bar, offset):
+    colors = [[255, 0, 0], [255, 100, 0], [255, 255, 0], [0, 255, 0], [0, 0, 255]]
+    final = ''
+    for i in range(len(bar)):
+        final += colored(bar[i], colors[(i // 2 + offset) % len(colors)])
+    final += colored(f' {borat} ', colors[(len(bar) // 2 + offset) % len(colors)])
+    return final
 
 def progress(i, total, action, use_emoji=False):
     i = i + 1
@@ -17,13 +35,18 @@ def progress(i, total, action, use_emoji=False):
         bar = '█' * filled + '-' * (20 - filled)
 
     if percent <= 40:
-        color = 'red'
+        color = [255, 0, 0]
     elif percent < 100:
-        color = 'yellow'
+        color = [255, 255, 0]
     else:
-        color = 'green'
+        color = [0, 255, 0]
 
-    sys.stdout.write('\r%s |%s| ' % (action.ljust(30), bar) + colored('{0:.0f}%'.format(percent), color))
+        for i in reversed(range(20)):
+            out(action, rainbow_bar(bar, i), percent, color)
+            sleep(0.1)
+
+    done = (percent == 100)
+    out(action, bar, percent, color, done)
 
     if i == total:
         sys.stdout.write('\n')

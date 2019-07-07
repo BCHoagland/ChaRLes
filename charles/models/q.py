@@ -6,22 +6,24 @@ class Q(Network):
     def __init__(self, env, n_obs=None):
         super().__init__(env, n_obs)
 
+        n_h = 64
+
         self.pre_state = nn.Sequential(
-            nn.Linear(self.n_obs, 64),
+            nn.Linear(self.n_obs, n_h),
             nn.ELU(),
-            nn.Linear(64, 32),
+            nn.Linear(n_h, n_h // 2),
             nn.ELU()
         )
 
         self.pre_action = nn.Sequential(
-            nn.Linear(self.n_acts, 32),
+            nn.Linear(self.n_acts, n_h // 2),
             nn.ELU()
         )
 
         self.main = nn.Sequential(
-            nn.Linear(64, 64),
+            nn.Linear(n_h, n_h),
             nn.ELU(),
-            nn.Linear(64, 1)
+            nn.Linear(n_h, 1)
         )
 
     def forward(self, s, a):

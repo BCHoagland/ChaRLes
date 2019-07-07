@@ -79,8 +79,7 @@ class Agent:
 
                 ep_reward += r
                 mask = 1 - done
-                final_ep_reward *= mask
-                final_ep_reward += (1 - mask) * ep_reward
+                final_ep_reward = (final_ep_reward * mask) + (done * ep_reward)
                 ep_reward *= mask
 
                 # visualize progress occasionally

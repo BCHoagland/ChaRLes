@@ -103,19 +103,21 @@ class TanhPolicy(Network):
     def __init__(self, env, n_obs=None):
         super().__init__(env, n_obs)
 
+        n_h = 64
+
         self.main = nn.Sequential(
-            nn.Linear(self.n_obs, 64),
+            nn.Linear(self.n_obs, n_h),
             nn.Tanh(),
-            nn.Linear(64, 64),
+            nn.Linear(n_h, n_h),
             nn.Tanh()
         )
 
         self.mean = nn.Sequential(
-            nn.Linear(64, self.n_acts)
+            nn.Linear(n_h, self.n_acts)
         )
 
         self.log_std = nn.Sequential(
-            nn.Linear(64, self.n_acts)
+            nn.Linear(n_h, self.n_acts)
         )
 
     def dist(self, s):
