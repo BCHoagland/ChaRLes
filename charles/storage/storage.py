@@ -5,6 +5,8 @@ from collections import deque
 
 class Storage:
     def __init__(self, config):
+        self.device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+        
         try:
             self.buffer = deque(maxlen=int(config.storage_size))
         except:
@@ -27,7 +29,7 @@ class Storage:
 
         # group together all data of the same type
         n = len(self.buffer[0])
-        data = [torch.FloatTensor(np.array([arr[i] for arr in source])) for i in range(n)]
+        data = [torch.FloatTensor(np.array([arr[i] for arr in source])).to(self.device) for i in range(n)]
 
         # expend data dimensions until they all have the same number of dimensions
         max_dim = max([len(d.shape) for d in data])

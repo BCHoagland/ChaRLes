@@ -35,7 +35,7 @@ class Env:
 
     def step(self, a):
         if isinstance(a, torch.Tensor):
-            a = a.numpy()
+            a = a.cpu().numpy()
         s2, r, done, info = self.env.step(a)
         if len(np.array(s2).shape) == 0:
             s2 = np.expand_dims(s2, axis=0)
@@ -55,5 +55,5 @@ class TanhAction(Env):
         return getattr(self.env, k)
 
     def step(self, a):
-        a = ((torch.FloatTensor(a) + 1) / 2) * (self.env.action_space.high - self.env.action_space.low) + self.env.action_space.low
+        a = ((torch.FloatTensor(a.cpu()) + 1) / 2) * (self.env.action_space.high - self.env.action_space.low) + self.env.action_space.low
         return self.env.step(a)
