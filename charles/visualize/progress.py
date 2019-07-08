@@ -22,6 +22,11 @@ def rainbow_bar(bar, offset):
     final += colored(f' {borat} ', colors[(len(bar) // 2 + offset) % len(colors)])
     return final
 
+def get_color(ratio):
+    r = int(min(max(500 * (1 - ratio), 0), 255))
+    g = int(min(max(500 * ratio, 0), 255))
+    return[r, g, 0]
+
 def progress(i, total, action, use_emoji=False):
     i = i + 1
     ratio = i / total
@@ -34,13 +39,9 @@ def progress(i, total, action, use_emoji=False):
     else:
         bar = '█' * filled + '-' * (20 - filled)
 
-    if percent <= 40:
-        color = [255, 0, 0]
-    elif percent < 100:
-        color = [255, 255, 0]
-    else:
-        color = [0, 255, 0]
+    color = get_color(ratio)
 
+    if percent == 100:
         for i in reversed(range(20)):
             out(action, rainbow_bar(bar, i), percent, color)
             sleep(0.1)
