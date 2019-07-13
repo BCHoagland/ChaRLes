@@ -1,5 +1,4 @@
 import random
-import numpy as np
 from charles.algorithm import Algorithm
 from charles.models import *
 

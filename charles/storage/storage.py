@@ -6,7 +6,7 @@ from collections import deque
 class Storage:
     def __init__(self, config):
         self.device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-        
+
         try:
             self.buffer = deque(maxlen=int(config.storage_size))
         except:
@@ -17,7 +17,7 @@ class Storage:
         '''stored a single group of data'''
         def fix(x):
             if isinstance(x[0], np.bool_): x = 1 - x
-            if not isinstance(x, np.ndarray): x = np.array(x)
+            if not isinstance(x, np.ndarray): x = np.array(x.cpu())
             if len(x.shape) == 0: x = np.expand_dims(x, axis=0)
             return x
 
