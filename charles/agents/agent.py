@@ -51,6 +51,9 @@ class Agent:
             self.storage.store((s, a, r, s2, done))
             s = s2
 
+    def argmax(self, x, axis=1):
+        return np.argmax(x.cpu(), axis=axis)
+
     def train(self):
         self.algo.setup()
 

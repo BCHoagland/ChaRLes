@@ -19,7 +19,7 @@ class DDQN(Algorithm):
         if random.random() < 0.05:
             a = self.random_action()
         else:
-            a = np.argmax(self.Q1(s), axis=1)
+            a = self.argmax(self.Q1(s))
 
         s2, r, done, _ = self.env.step(a)
         data = (s, a, r, s2, done)
