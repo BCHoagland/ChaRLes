@@ -109,6 +109,8 @@ class Agent:
             os.system('gif-for-cli "party parrot"')
 
     def demo(self):
+        storage = Storage(self.config)
+
         ep_reward = np.zeros(self.config.actors)
         final_ep_reward = np.zeros(self.config.actors)
 
@@ -120,7 +122,10 @@ class Agent:
                 progress(t, T, 'Testing')
 
             with torch.no_grad():
-                s, r, done, _ = self.algo.interact(s)
+                s2, r, done, data = self.algo.interact(s)
+            storage.store(data)
+
+            s = s2
 
             ep_reward += r
             mask = 1 - done
@@ -128,4 +133,7 @@ class Agent:
             final_ep_reward += (1 - mask) * ep_reward
             ep_reward *= mask
 
-            self.visualizer.plot(self.algo.name, 'Episodic Reward', 'Timesteps', t, final_ep_reward, self.algo.color, title='Testing')
+            if t % self.config.vis_iter == 0:
+                self.visualizer.plot(self.algo.name, 'Episodic Reward', 'Timesteps', t, final_ep_reward, self.algo.color, title='Testing')
+
+        return storage

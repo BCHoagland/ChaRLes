@@ -9,7 +9,7 @@ def make_env(id):
     return _f
 
 class Env:
-    def __init__(self, env_name, actors):
+    def __init__(self, env_name, actors=1):
         self.env = SubprocVecEnv([make_env(env_name) for _ in range(actors)])
         self.observation_space = self.env.observation_space
         self.action_space = self.env.action_space

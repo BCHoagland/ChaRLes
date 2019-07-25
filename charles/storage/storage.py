@@ -4,7 +4,7 @@ import numpy as np
 from collections import deque
 
 class Storage:
-    def __init__(self, config):
+    def __init__(self, config=None):
         self.device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
         try:
@@ -42,9 +42,10 @@ class Storage:
         '''return all stored data'''
         return self.get(self.buffer)
 
-    def sample(self):
+    def sample(self, batch_size=None):
         '''return a random sample from the stored data'''
-        batch_size = min(len(self.buffer), self.config.batch_size)
+        if batch_size is None: batch_size = self.config.batch_size
+        batch_size = min(len(self.buffer), batch_size)
         batch = random.sample(self.buffer, batch_size)
         return self.get(batch)
 
