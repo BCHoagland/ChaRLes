@@ -15,14 +15,19 @@ class Storage:
 
     def store(self, data):
         '''stored a single group of data'''
+
+        # make all data 1-dimensional numpy arrays, changing booleans to their corresponding mask value
         def fix(x):
-            if isinstance(x[0], np.bool_): x = 1 - x
-            if not isinstance(x, np.ndarray): x = np.array(x.cpu())
+            if isinstance(x, np.bool_): x = 1 - x
+            if isinstance(x, torch.Tensor): x = np.array(x.cpu())
             if len(x.shape) == 0: x = np.expand_dims(x, axis=0)
             return x
 
-        transition = tuple(fix(x) for x in data)
-        self.buffer.append(transition)
+        # add transitions to the buffer from each agent separately
+        num_agents = data[0].shape[0]
+        for agent in range(num_agents):
+            transition = tuple(fix(x[agent]) for x in data)
+            self.buffer.append(transition)
 
     def get(self, source):
         '''return all data from the given source'''

@@ -1,7 +1,7 @@
 import os
 import torch
 import numpy as np
-from charles.env import *
+from charles.env import Env
 from charles.storage import *
 from charles.visualize import *
 
@@ -54,8 +54,8 @@ class Agent:
     def argmax(self, x, axis=1):
         return np.argmax(x.cpu(), axis=axis)
 
-    def train(self):
-        self.algo.setup()
+    def train(self, setup=True):
+        if setup: self.algo.setup()
 
         mean_r = np.zeros(self.config.actors)
 
@@ -69,7 +69,7 @@ class Agent:
         while total_timesteps < self.config.max_timesteps:
 
             # collect trajectory
-            for t in range(int(self.config.trajectory_length)):
+            for _ in range(int(self.config.trajectory_length)):
 
                 # collect transition
                 with torch.no_grad():
