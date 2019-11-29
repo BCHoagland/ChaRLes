@@ -32,9 +32,6 @@ class Agent:
 
         self.gif = gif
 
-    def random_action(self):
-        return np.stack([self.env.action_space.sample() for _ in range(self.config.actors)])
-
     def noisy_action(self, a, std, clip=None):
         noise = np.random.normal(0, std)
         if clip is not None:
@@ -47,7 +44,7 @@ class Agent:
         for step in range(T):
             if step % self.config.vis_iter == self.config.vis_iter - 1:
                 progress(step, T, 'Exploring')
-            a = self.random_action()
+            a = self.env.random_action()
             s2, r, done, _ = self.env.explore_step(a)
             self.storage.store((s, a, r, s2, done))
             s = s2

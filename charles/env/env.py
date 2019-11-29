@@ -13,6 +13,7 @@ class Env:
         self.env = SubprocVecEnv([make_env(env_name) for _ in range(actors)])
         self.observation_space = self.env.observation_space
         self.action_space = self.env.action_space
+        self.actors = actors
 
         try:
             self.action_space.low = torch.FloatTensor(self.action_space.low)
@@ -40,6 +41,9 @@ class Env:
         if len(np.array(s2).shape) == 0:
             s2 = np.expand_dims(s2, axis=0)
         return s2, r, done, info
+    
+    def random_action(self):
+        return np.stack([self.env.action_space.sample() for _ in range(self.actors)])
 
     def render(self):
         return self.env.render()
@@ -57,3 +61,14 @@ class TanhAction(Env):
     def step(self, a):
         a = ((torch.FloatTensor(a.cpu()) + 1) / 2) * (self.env.action_space.high - self.env.action_space.low) + self.env.action_space.low
         return self.env.step(a)
+    
+    def explore_step(self, a):
+        s2, r, done, info = self.step(a)
+        if len(np.array(s2).shape) == 0:
+            s2 = np.expand_dims(s2, axis=0)
+        return s2, r, done, info
+    
+    def random_action(self):
+        a = torch.FloatTensor(np.stack([self.env.action_space.sample() for _ in range(self.actors)]))
+        a = (a - self.env.action_space.low) / (self.env.action_space.high - self.env.action_space.low) * 2 - 1
+        return a
