@@ -109,32 +109,32 @@ class Agent:
         if self.gif:
             os.system('gif-for-cli "party parrot"')
 
-    def demo(self):
-        storage = Storage(self.config)
+    # def demo(self):
+    #     storage = Storage(self.config)
 
-        ep_reward = np.zeros(self.config.actors)
-        final_ep_reward = np.zeros(self.config.actors)
+    #     ep_reward = np.zeros(self.config.actors)
+    #     final_ep_reward = np.zeros(self.config.actors)
 
-        T = self.config.testing_steps
+    #     T = self.config.testing_steps
 
-        s = self.env.reset()
-        for t in range(T):
-            if t % (T / 20) == (T / 20) - 1:
-                progress(t, T, 'Testing')
+    #     s = self.env.reset()
+    #     for t in range(T):
+    #         if t % (T / 20) == (T / 20) - 1:
+    #             progress(t, T, 'Testing')
 
-            with torch.no_grad():
-                s2, r, done, data = self.algo.interact(s)
-            storage.store(data)
+    #         with torch.no_grad():
+    #             s2, r, done, data = self.algo.interact(s)
+    #         storage.store(data)
 
-            s = s2
+    #         s = s2
 
-            ep_reward += r
-            mask = 1 - done
-            final_ep_reward *= mask
-            final_ep_reward += (1 - mask) * ep_reward
-            ep_reward *= mask
+    #         ep_reward += r
+    #         mask = 1 - done
+    #         final_ep_reward *= mask
+    #         final_ep_reward += (1 - mask) * ep_reward
+    #         ep_reward *= mask
 
-            if t % self.config.vis_iter == 0:
-                self.visualizer.plot(self.algo.name, 'Episodic Reward', 'Timesteps', t, final_ep_reward, self.algo.color, title='Testing')
+    #         if t % self.config.vis_iter == 0:
+    #             self.visualizer.plot(self.algo.name, 'Episodic Reward', 'Timesteps', t, final_ep_reward, self.algo.color, title='Testing')
 
-        return storage
+    #     return storage

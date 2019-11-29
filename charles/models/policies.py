@@ -26,7 +26,7 @@ class CategoricalPolicy(Network):
             nn.ELU(),
             nn.Linear(64, 64),
             nn.ELU(),
-            nn.Linear(64, self.n_acts),
+            nn.Linear(64, self.n_acts)
         )
 
     def dist(self, s):
