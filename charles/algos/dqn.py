@@ -15,7 +15,7 @@ class DQN(Algorithm):
 
     def interact(self, s):
         if random.random() < 0.05:
-            a = self.random_action()
+            a = self.env.random_action()
         else:
             a = self.argmax(self.Q(s), axis=1)
 
